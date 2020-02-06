@@ -1,0 +1,22 @@
+Resources:  
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: CloudFormation managed DB subnet group.
+      SubnetIds:
+        - !Ref SubnetA
+        - !Ref SubnetB
+  DatabaseCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DBClusterIdentifier: ${self:custom.stage}-${self:service}-cluster  
+      DatabaseName: myawesomedatabase
+      Engine: aurora
+      EngineMode: serverless
+      MasterUsername: mydbuser
+      MasterUserPassword: mydatabasepassword
+      Port: 3306
+      BackupRetentionPeriod: 7
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      VpcSecurityGroupIds:
+        - !Ref SecurityGroup

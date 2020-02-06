@@ -1,0 +1,22 @@
+benefitsLambda:
+  handler: src/handlers/index.handler
+  name: ${self:provider.stage}-benefitsLambda 
+  description: benefitsLambda description 
+  runtime: nodejs12.x
+  memorySize: 3008 
+  timeout: 30 
+  role: LambdaToVPCDynamoDB
+  environment:
+    client_id: ${self:custom.secrets.${self:provider.stage}.clientId}
+    client_secret: ${self:custom.secrets.${self:provider.stage}.clientSecret}
+  vpc:
+    securityGroupIds:
+      - !Ref SecurityGroup
+    subnetIds:
+      - !Ref SubnetA
+      - !Ref SubnetB    
+  events: 
+    - http:
+        method: GET
+        path: /benefits
+        cors: true
